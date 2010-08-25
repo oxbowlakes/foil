@@ -1,0 +1,8 @@
+Foil is a scheduling DSL for Scala which is agnostic to the underlying
+datetime library implementation. It has built-in hooks for the common 
+libraries:
+
+ - JODA
+ - JSR-310 (javax.time)
+ - Java Date/Calendar
+ - Saturn
