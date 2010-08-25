@@ -18,8 +18,6 @@ trait Schedules {
   implicit def scheduledfuture2limitedfuture(s : ScheduledFuture[_]) = new LimitedScheduledFuture(s)
   
   protected def next[T,D,I](t : T, zone : TimeZone)(implicit it : TimeLike[T,D,I], id : DateLike[D]) = {
-    val it = implicitly[TimeLike[T]]
-    val id = implicitly[DateLike[D]]
     it.instant(t, if (it.compare(it.now(zone), t) < 0) id.now(zone) else id.plus(id.now(zone), 1), zone)
   }}
 
