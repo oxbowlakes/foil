@@ -20,7 +20,10 @@ trait ScalaActorStrategy {
 }
 
 trait JavaUtilConcurrentStrategy {
-  protected lazy val sched = Executors.newSingleThreadScheduledExecutor
+
+  protected def nThreads : Int
+
+  protected lazy val sched = Executors.newScheduledThreadPool(nThreads)  
   protected[this] implicit def thunk2runnable(f : => Unit) = new Runnable {
     def run = f
   }

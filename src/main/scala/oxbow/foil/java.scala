@@ -95,22 +95,22 @@ trait JavaDates extends JavaUtilCalendarFields with Intervals {
 }
 
 trait JavaCalendars extends JavaUtilCalendarFields with Intervals {
-  import java.util.Calendar
-  implicit val CalendarInstantLike = new InstantLike[Calendar] {
-    def plus(value : Calendar, interval: Interval) = {
+  import java.util.{Calendar, Date}
+  implicit val CalendarInstantLike = new InstantLike[Date] {
+    def plus(value : Date, interval: Interval) = {
       val cal = Calendar.getInstance
-      cal.setTime(value.getTime)
+      cal.setTime(value)
       cal.add(fields(interval.unit), interval.duration.toInt)
-      cal
+      cal.getTime
     }
 
-    def now = Calendar.getInstance
+    def now = new Date
 
-    def millisSinceEpoch(x: Calendar) = x.getTime.getTime
+    def millisSinceEpoch(x: Date) = x.getTime
 
-    def fromEpochMillis(l: Long) = { val c = Calendar.getInstance; c.setTimeInMillis(l); c}
+    def fromEpochMillis(l: Long) = new Date(l)
 
-    def delay(value : Calendar, other : Calendar)(unit : TimeUnit) = (other.getTime.getTime - value.getTime.getTime).millis.as(unit)
+    def delay(value : Date, other : Date)(unit : TimeUnit) = (other.getTime - value.getTime).millis.as(unit)
 
   }
 
@@ -120,7 +120,7 @@ trait JavaCalendars extends JavaUtilCalendarFields with Intervals {
     def now(zone: TimeZone) = Calendar.getInstance(zone)
   }
 
-  implicit val CalendarTimeLike = new TimeLike[Calendar, Calendar, Calendar] {
+  implicit val CalendarTimeLike = new TimeLike[Calendar, Calendar, Date] {
 
     def compare(x : Calendar, y: Calendar) : Int = {
       Array(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND).view map (field => x.get(field).compare(y.get(field))) find (_ != 0) getOrElse(0)
@@ -132,14 +132,8 @@ trait JavaCalendars extends JavaUtilCalendarFields with Intervals {
       val cal = Calendar.getInstance(zone)
       Array(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND) foreach (field => cal.set(field, t.get(field)))
       Array(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH) foreach (field => cal.set(field, d.get(field)))
-      cal
+      cal.getTime
     }
 
-    def next(t: Calendar, zone: TimeZone) = {
-      val cal = Calendar.getInstance(zone)
-      Array(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND) foreach (field => cal.set(field, t.get(field)))
-      if (cal.getTimeInMillis < Platform.currentTime) cal.add(Calendar.DATE, 1)
-      cal
-    }
   }
 }

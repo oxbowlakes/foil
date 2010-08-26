@@ -19,7 +19,11 @@ trait Schedules {
   
   protected def next[T,D,I](t : T, zone : TimeZone)(implicit it : TimeLike[T,D,I], id : DateLike[D]) = {
     it.instant(t, if (it.compare(it.now(zone), t) < 0) id.now(zone) else id.plus(id.now(zone), 1), zone)
-  }}
+  }
+  def now[I : InstantLike] : I = implicitly[InstantLike[I]].now
+  def dateNow[D : DateLike](zone : TimeZone = TimeZone.getDefault) : D = implicitly[DateLike[D]].now(zone)
+  def timeNow[T](zone : TimeZone = TimeZone.getDefault)(implicit ev : TimeLike[T,_,_]) : T = ev.now(zone)
+}
 
 /**
  * A limited scheduled future is a pimped class which allows us to control execution of some periodic schedule which we
@@ -205,6 +209,18 @@ class Schedule(f : => Unit) extends Intervals with Schedules {
       now
 
     startingAtNext(t, zone) thenEvery 1.days
+  }
+  def todayNoEarlierThan[T,D,I](t : T, zone : TimeZone = TimeZone.getDefault)(implicit ev : TimeLike[T,D,I], ev2 : InstantLike[I], ev3 : DateLike[D], strategy : Scheduler) : Option[ScheduledFuture[_]] = {
+    if ((ev.compare(ev.now(zone), t) > 0))
+      now
+
+    Some(onceAtNext(t, zone))
+  }
+  def startingTodayNoEarlierThan[T,D,I](t : T, zone : TimeZone = TimeZone.getDefault)(implicit ev : TimeLike[T,D,I], ev2 : InstantLike[I], ev3 : DateLike[D]) : RepeatingSchedule[I] = {
+    if ((ev.compare(ev.now(zone), t) > 0))
+      immediately
+
+    startingAtNext(t, zone)
   }}
 
 /**
