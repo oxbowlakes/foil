@@ -6,3 +6,6 @@ libraries:
  - JSR-310 (javax.time)
  - Java Date/Calendar
  - Saturn
+
+Please see the Wiki for more details: http://wiki.github.com/oxbowlakes/foil/
+Or contact us on the mailing list:  http://groups.google.com/group/foil-scala-scheduling
