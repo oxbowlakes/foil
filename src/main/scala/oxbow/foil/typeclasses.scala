@@ -78,11 +78,6 @@ trait TimeLike[T, D, I] {
   def now(zone : TimeZone = TimeZone.getDefault ) : T
 
   /**
-   * Return the Instant which represents the soonest instant with the given time of day in the supplied time zone
-   */
-  def next(t : T, zone : TimeZone = TimeZone.getDefault) : I
-
-  /**
    * Return the instant which represents the given time of day on the given date in the given zone
    */
   def instant(t : T, d : D, zone : TimeZone = TimeZone.getDefault) : I
@@ -92,8 +87,6 @@ trait ZonedTimeLike[Z, D, I] extends TimeLike[Z, D, I] {
   def zone(z : Z) : TimeZone
 
   def nowZoned(z : Z) = now(zone(z))
-
-  def nextZoned(z : Z) = next(z, zone(z))
 
   def instantZoned(z : Z, d : D) = instant(z, d, zone(z))
 

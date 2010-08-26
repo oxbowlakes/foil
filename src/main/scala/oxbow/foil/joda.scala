@@ -32,14 +32,6 @@ trait JodaLowPriority {
   implicit val JodaTODTimeLike = new TimeLike[TimeOfDay, YearMonthDay, Instant] {
     def instant(t: TimeOfDay, d: YearMonthDay, zone: TimeZone) = t.toDateTimeToday(DateTimeZone.forTimeZone(zone)).withDate(d.getYear, d.getMonthOfYear, d.getDayOfMonth).toInstant
 
-    def next(t: TimeOfDay, zone: TimeZone) = {
-      val now = new TimeOfDay(DateTimeZone.forTimeZone(zone))
-      (if (now.compareTo(t) < 0)
-        t.toDateTimeToday(DateTimeZone.forTimeZone(zone))
-      else
-        t.toDateTimeToday(DateTimeZone.forTimeZone(zone)).plusDays(1)).toInstant
-    }
-
     def now(zone: TimeZone) = new TimeOfDay(DateTimeZone.forTimeZone(zone))
 
     def compare(x: TimeOfDay, y: TimeOfDay) = x compareTo y
@@ -74,14 +66,6 @@ trait Joda16 extends Intervals with JodaLowPriority {
 
   implicit val JodaTimeLike = new TimeLike[LocalTime, LocalDate, Instant] {
     def instant(t: LocalTime, d: LocalDate, zone: TimeZone) = t.toDateTimeToday(DateTimeZone.forTimeZone(zone)).withDate(d.getYear, d.getMonthOfYear, d.getDayOfMonth).toInstant
-
-    def next(t: LocalTime, zone: TimeZone) = {
-      val now = new LocalTime(DateTimeZone.forTimeZone(zone))
-      (if (now.compareTo(t) < 0)
-        t.toDateTimeToday(DateTimeZone.forTimeZone(zone))
-      else
-        t.toDateTimeToday(DateTimeZone.forTimeZone(zone)).plusDays(1)).toInstant
-    }
 
     def now(zone: TimeZone) = new LocalTime(DateTimeZone.forTimeZone(zone))
 

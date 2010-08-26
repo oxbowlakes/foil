@@ -181,7 +181,7 @@ class Schedule(f : => Unit) extends Intervals with Schedules {
 
   def startingAtNext[T,D,I](t : T, zone : TimeZone = TimeZone.getDefault)(implicit ev : TimeLike[T,D,I], ev2 : InstantLike[I], ev3 : DateLike[D]) = startingAt(next(t,zone))
 
-  def startingAtNextZoned[Z,D,I](t : Z)(implicit ev : ZonedTimeLike[Z,D,I], ev2 : InstantLike[I], ev3 : DateLike[D]) = startingAt(ev.next(t, ev.zone(t)))
+  def startingAtNextZoned[Z,D,I](t : Z)(implicit ev : ZonedTimeLike[Z,D,I], ev2 : InstantLike[I], ev3 : DateLike[D]) = startingAt(next(t, ev.zone(t)))
 
   /**
    * Return a repeating (periodic) schedule whereby the first invocation will after the given interval. Nothing will actually be

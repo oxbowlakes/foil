@@ -64,14 +64,6 @@ trait JSR310 {
   implicit val JSR310TimeLike = new TimeLike[LocalTime, LocalDate, Instant] {
     def instant(t: LocalTime, d: LocalDate, zone: TZ) = d.atTime(t).atZone(zoneFor(zone)).toInstant
 
-    def next(t: LocalTime, zone: TZ) = { 
-      val now = zonedClock(zone).time()
-      if (t.compareTo(now) > 0)
-        zonedClock(zone).today.atTime(t).atZone(zoneFor(zone)).toInstant
-      else
-        zonedClock(zone).tomorrow.atTime(t).atZone(zoneFor(zone)).toInstant
-    }
-
     def now(zone: TZ) = zonedClock(zone).time
 
     def compare(x: LocalTime, y: LocalTime) = x compareTo y
@@ -79,8 +71,6 @@ trait JSR310 {
 
   implicit val JSR310ZonedTimeLike = new ZonedTimeLike[OffsetTime, LocalDate, Instant] {
     def instant(t: OffsetTime, d: LocalDate, zone: TZ) = JSR310TimeLike.instant(t.toLocalTime, d, zone)
-
-    def next(t: OffsetTime, zone: TZ) = JSR310TimeLike.next(t.toLocalTime, zone)
 
     def now(zone: TZ) = zonedClock(zone).offsetTime
 

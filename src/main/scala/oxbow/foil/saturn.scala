@@ -36,7 +36,5 @@ trait Saturn extends Intervals {
 
     def instant(x: TimeOfDay, d: Date, zone : TimeZone) = d.toInstant(x)(zone)
 
-    def next(t: TimeOfDay, zone: TimeZone) = t nextIn zone
-
   }
 }

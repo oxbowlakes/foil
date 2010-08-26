@@ -67,19 +67,6 @@ trait JavaDates extends JavaUtilCalendarFields with Intervals {
       cal.getTime
     }
 
-    def next(t: Date, zone: TimeZone) = {
-      val now = Calendar.getInstance(zone)
-      val date =
-        (if (t.getHours > now.get(Calendar.HOUR_OF_DAY) || t.getMinutes > now.get(Calendar.MINUTE) || t.getSeconds > now.get(Calendar.SECOND))
-          now
-        else
-          { now.add(Calendar.DATE, 1) ; now }).getTime
-      date.setHours(t.getHours)
-      date.setMinutes(t.getMinutes)
-      date.setSeconds(t.getSeconds)
-      date
-    }
-
     def now(zone: TimeZone) = Calendar.getInstance(zone).getTime
 
     def compare(x: Date, y: Date) = {
