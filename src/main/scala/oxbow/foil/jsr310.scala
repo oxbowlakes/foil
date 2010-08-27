@@ -22,7 +22,7 @@ trait JSR310 {
    * Can override this method if we wish to define a different way of providing zone conversions
    */
   protected[this] def zoneFor(zone : TZ) = TimeZone.of(zone.getID)
-  private[this] def zonedClock(zone : TZ) = Clock.system(zoneFor(zone))
+  protected[this] def zonedClock(zone : TZ) = Clock.system(zoneFor(zone))
 
   implicit def interval2duration(i : Interval) = Duration.of(i.duration, i.unit)
   implicit def duration2interval(d : Duration) = Interval(d.toMillisLong, TimeUnit.MILLISECONDS)
