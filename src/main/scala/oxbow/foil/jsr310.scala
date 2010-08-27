@@ -69,6 +69,8 @@ trait JSR310 {
     def compare(x: LocalTime, y: LocalTime) = x compareTo y
   }
 
+}
+trait JSR310Zoned extends JSR310 {
   implicit val JSR310ZonedTimeLike = new ZonedTimeLike[OffsetTime, LocalDate, Instant] {
     def instant(t: OffsetTime, d: LocalDate, zone: TZ) = JSR310TimeLike.instant(t.toLocalTime, d, zone)
 
